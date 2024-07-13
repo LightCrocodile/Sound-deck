@@ -1,0 +1,46 @@
+import serial
+import webbrowser
+
+try:
+    ser = serial.Serial('COM14', 9600)  # Replace 'COM14' with the correct COM port
+except serial.SerialException as e:
+    print(f"Error opening serial port: {e}")
+    exit(1)
+except PermissionError as e:
+    print(f"Permission error: {e}")
+    exit(1)
+
+while True:
+    try:
+        if ser.in_waiting > 0:
+            line = ser.readline().strip().decode('utf-8')
+            print(f"Received: {line}")
+            
+            # Perform actions based on received signals
+            if line == '1':
+                print("Button 1 pressed")
+                webbrowser.open("https://mail.google.com/mail/u/0/#inbox")
+                # Perform action for button 1 (e.g., open a file)
+            elif line == '2':
+                print("Button 2 pressed")
+                webbrowser.open("https://chatgpt.com/")
+                # Perform action for button 2
+            elif line == '3':
+                print("Button 3 pressed")
+                # Open YouTube in the default web browser
+                webbrowser.open("https://www.youtube.com")
+            elif line == '4':
+                print("Button 4 pressed")
+                webbrowser.open("https://www.google.com/")
+                # Perform action for button 4
+            elif line == '5':
+                print("Button 5 pressed")
+                webbrowser.open("https://store.steampowered.com/")
+                # Perform action for button 5
+    except serial.SerialException as e:
+        print(f"Serial error: {e}")
+        break
+    except Exception as e:
+        print(f"Error: {e}")
+        break
+print(f"Serial data available: {ser.in_waiting}")
